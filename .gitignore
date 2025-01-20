@@ -1,0 +1,40 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# React build output
+/build
+/.cache
+/public/static
+
+# IDE and editor folders
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Environment files
+# .env
+# .env.local
+# .env.development
+# .env.test
+# .env.production
+
+# Log files
+*.log
+
+# Coverage directory used by tools like Jest
+/coverage
+
+# Miscellaneous
+*.tgz
+*.bak
+*.swp
+
+# Ignore PEM files
+# *.pem
