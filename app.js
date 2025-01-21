@@ -17,6 +17,8 @@ const {
 const app = express();
 const server = http.createServer(app);
 console.log("Allowed origin:", process.env.CLIENT_ORIGIN);
+console.warn("Allowed origin:", process.env.CLIENT_ORIGIN);
+console.error("Allowed origin:", process.env.CLIENT_ORIGIN);
 const io = new Server(server, {
   cors: {
     origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
