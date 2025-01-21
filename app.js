@@ -44,6 +44,13 @@ app.use(cookieParser());
 // Middleware to parse json body
 app.use(express.json());
 
+app.get("/health", (req, res) => {
+  console.log("Allowed origin:", process.env.CLIENT_ORIGIN);
+  console.warn("Allowed origin:", process.env.CLIENT_ORIGIN);
+  console.error("Allowed origin:", process.env.CLIENT_ORIGIN);
+  res.json({ status: "Up and running...!", origin: process.env.CLIENT_ORIGIN });
+});
+
 // Authentication routes (login, register, etc.)
 app.use("/auth", authRouter);
 // User session management routes (refresh token, logout)
@@ -93,9 +100,6 @@ const startServer = async () => {
   await connectToMongoDb();
   server.listen(PORT, () => {
     console.log(`Server is running on http://127.0.0.1:${PORT}`);
-    console.log("Allowed origin:", process.env.CLIENT_ORIGIN);
-    console.warn("Allowed origin:", process.env.CLIENT_ORIGIN);
-    console.error("Allowed origin:", process.env.CLIENT_ORIGIN);
   });
 };
 
