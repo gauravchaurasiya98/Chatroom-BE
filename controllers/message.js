@@ -1,4 +1,4 @@
-const Message = require("../models/Message");
+const Message = require("../models/message");
 const chatroomController = require("./chatroom");
 
 const saveMessage = async (sender, chatroom, content) => {
