@@ -30,6 +30,15 @@ app.use(
     credentials: true, // Allow cookies
   })
 );
+
+app.options(
+  "*",
+  cors({
+    origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
+    credentials: true,
+  })
+);
+
 // Middleware to parse cookie
 app.use(cookieParser());
 // Middleware to parse json body
