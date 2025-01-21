@@ -24,13 +24,13 @@ const io = new Server(server, {
 });
 
 // CORS configuration
-app.use(
+/*app.use(
   cors({
     origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
     credentials: true, // Allow cookies
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   })
-);
+);*/
 
 // app.options("*", cors());
 /*app.options("*", (req, res) => {
