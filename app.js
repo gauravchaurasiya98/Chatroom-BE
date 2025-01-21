@@ -24,47 +24,18 @@ const io = new Server(server, {
 });
 
 // CORS configuration
-/*app.use(
+app.use(
   cors({
     origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
     credentials: true, // Allow cookies
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   })
-);*/
-
-// app.options("*", cors());
-/*app.options("*", (req, res) => {
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    process.env.CLIENT_ORIGIN || "http://localhost:5173"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, PATCH, DELETE, OPTIONS"
-  );
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.sendStatus(200);
-});*/
+);
 
 // Middleware to parse cookie
 app.use(cookieParser());
 // Middleware to parse json body
 app.use(express.json());
-
-/*app.use((req, res, next) => {
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    process.env.CLIENT_ORIGIN || "http://localhost:5173"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, PATCH, DELETE, OPTIONS"
-  );
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.setHeader("Access-Control-Allow-Credentials", "true"); // Allow cookies
-  next();
-});*/
 
 app.get("/health", (req, res) => {
   res.json({
