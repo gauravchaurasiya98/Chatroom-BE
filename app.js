@@ -48,7 +48,7 @@ app.get("/health", (req, res) => {
   console.log("Allowed origin:", process.env.CLIENT_ORIGIN);
   console.warn("Allowed origin:", process.env.CLIENT_ORIGIN);
   console.error("Allowed origin:", process.env.CLIENT_ORIGIN);
-  res.json({ status: "Up and running...!", origin: process.env.CLIENT_ORIGIN });
+  res.json({ status: "Up and running...!", allowedOrigin: process.env.CLIENT_ORIGIN });
 });
 
 // Authentication routes (login, register, etc.)

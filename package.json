@@ -4,7 +4,9 @@
   "description": "Chatroom application using websocket and having authentication using jwt token with expiry and refresh token feature and persisting chats in the mongodb",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js",
+    // "start": "nodemon app.js",
+    "start": "node app.js",
+    "build": "echo \"Chatroom backend deploying...\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Gaurav Chaurasiya",
