@@ -24,14 +24,16 @@ const io = new Server(server, {
   },
 });
 
+const corsOptions = {
+  origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
+  credentials: true, // Allow cookies
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+};
+
 // CORS configuration
-app.use(
-  cors({
-    origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
-    credentials: true, // Allow cookies
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  })
-);
+app.use(cors(corsOptions));
+// Explicitly handle OPTIONS requests globally
+app.options("*", cors(corsOptions));
 
 // Middleware to parse cookie
 app.use(cookieParser());
