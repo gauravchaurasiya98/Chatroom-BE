@@ -24,7 +24,7 @@ const io = new Server(server, {
 });
 
 const corsOptions = {
-  origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
+  origin: "*",
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
 };
