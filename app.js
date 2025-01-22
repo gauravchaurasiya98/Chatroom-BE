@@ -23,7 +23,7 @@ const io = new Server(server, {
   },
 });
 
-/*const corsOptions = {
+const corsOptions = {
   origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
@@ -33,26 +33,11 @@ const io = new Server(server, {
 app.use(cors(corsOptions));
 
 // Handle OPTIONS requests globally
-app.options("*", cors(corsOptions));*/
+app.options("*", cors(corsOptions));
 
-// Middleware to set CORS headers
 app.use((req, res, next) => {
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    process.env.CLIENT_ORIGIN || "http://localhost:5173"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, PATCH, DELETE, OPTIONS"
-  );
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-
-  // Short-circuit OPTIONS requests
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(204);
-  }
-
+  console.log("Request Method:", req.method);
+  console.log("Request Headers:", req.headers);
   next();
 });
 
