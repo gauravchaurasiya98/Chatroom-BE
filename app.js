@@ -1,4 +1,5 @@
 require("dotenv").config();
+const path = require("path");
 const cors = require("cors");
 const http = require("http");
 const express = require("express");
@@ -9,6 +10,7 @@ const userRouter = require("./routes/user");
 const apiRouter = require("./routes/api");
 const validation = require("./middlewares/validation");
 const webSocketController = require("./controllers/websocket");
+const rootPath = require("./utils/root-path");
 const {
   connectToMongoDb,
   closeMongoConnection,
@@ -18,23 +20,19 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    // origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
-    origin: "*",
+    origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
     credentials: true, // Allow cookies
   },
 });
 
-const corsOptions = {
-  // origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
-  origin: "*",
-  credentials: true, // Allow cookies
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-};
-
 // CORS configuration
-app.use(cors(corsOptions));
-// Handle OPTIONS requests globally
-app.options("*", cors(corsOptions));
+app.use(
+  cors({
+    origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
+    credentials: true, // Allow cookies
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  })
+);
 
 // Middleware to parse cookie
 app.use(cookieParser());
@@ -54,6 +52,8 @@ app.use("/auth", authRouter);
 app.use("/user", validation.validateRefreshToken, userRouter);
 // Protected application-specific routes
 app.use("/api", validation.validateAuthToken, apiRouter);
+// Serve static files from the 'dist' directory
+app.use(express.static(path.join(rootPath, "dist")));
 app.use((err, req, res, next) => {
   console.error("Fallback error:", err.message);
   res

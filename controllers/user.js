@@ -102,7 +102,7 @@ const generateRefreshToken = (userInfo, res) => {
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true, // If true then prevents client-side JavaScript from accessing the cookie
       secure: true, // If true then send over only HTTPS
-      sameSite: "None", // Allow cross-origin cookies
+      sameSite: "Strict", // If "None" then Allow cross-origin cookies
       maxAge: 60 * 60 * 1000, // Cookie expiration time (1 hour)
     });
   } catch (error) {
