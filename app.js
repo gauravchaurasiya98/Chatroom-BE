@@ -18,28 +18,23 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
+    // origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
+    origin: "*",
     credentials: true, // Allow cookies
   },
 });
 
 const corsOptions = {
+  // origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
   origin: "*",
-  credentials: true,
+  credentials: true, // Allow cookies
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
 };
 
 // CORS configuration
 app.use(cors(corsOptions));
-
 // Handle OPTIONS requests globally
 app.options("*", cors(corsOptions));
-
-app.use((req, res, next) => {
-  console.log("Request Method:", req.method);
-  console.log("Request Headers:", req.headers);
-  next();
-});
 
 // Middleware to parse cookie
 app.use(cookieParser());
