@@ -10,7 +10,6 @@ const userRouter = require("./routes/user");
 const apiRouter = require("./routes/api");
 const validation = require("./middlewares/validation");
 const webSocketController = require("./controllers/websocket");
-const rootPath = require("./utils/root-path");
 const {
   connectToMongoDb,
   closeMongoConnection,
@@ -38,6 +37,8 @@ app.use(
 app.use(cookieParser());
 // Middleware to parse json body
 app.use(express.json());
+// Serve static files from the 'dist' directory
+app.use(express.static(path.join(__dirname, "dist")));
 
 app.get("/health", (req, res) => {
   res.json({
@@ -53,11 +54,9 @@ app.use("/user", validation.validateRefreshToken, userRouter);
 // Protected application-specific routes
 app.use("/api", validation.validateAuthToken, apiRouter);
 
-// Serve static files from the 'dist' directory
-app.use(express.static(path.join(rootPath, "dist")));
 // Serve UI for all unknown routes
 app.get("*", (req, res) => {
-  res.sendFile(path.join(rootPath, "dist", "index.html"));
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
 
 app.use((err, req, res, next) => {
