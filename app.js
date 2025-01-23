@@ -1,5 +1,5 @@
 require("dotenv").config();
-const path = require("path");
+// const path = require("path");
 const cors = require("cors");
 const http = require("http");
 const express = require("express");
@@ -40,7 +40,7 @@ app.use(cookieParser());
 // Middleware to parse json body
 app.use(express.json());
 // Serve static files from the 'dist' directory
-app.use(express.static(path.join(__dirname, "dist")));
+// app.use(express.static(path.join(__dirname, "dist")));
 
 app.get("/health", (req, res) => {
   res.json({
@@ -57,9 +57,9 @@ app.use("/user", validation.validateRefreshToken, userRouter);
 app.use("/api", validation.validateAuthToken, apiRouter);
 
 // Serve UI for all unknown routes
-app.get("*", (req, res) => {
+/*app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "dist", "index.html"));
-});
+});*/
 
 app.use((err, req, res, next) => {
   console.error("Fallback error:", err.message);
