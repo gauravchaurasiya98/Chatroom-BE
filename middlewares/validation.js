@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 const auth = require("../utils/authentication");
+const CustomError = require("../errors/CustomError");
+const ErrorCodes = require("../errors/ErrorCodes");
 
 exports.validateAuthToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -41,5 +43,29 @@ exports.authenticateWebSocketConnections = (socket, next) => {
       return next(new Error("Authentication error: Invalid or expired token"));
     socket.user = user; // Attach user data to the socket
     next(); // Proceed to the next middleware/connection handler
+  });
+};
+
+exports.authenticateUser = (socket, callback) => {
+  const authToken = socket.handshake.auth?.token; // Client sends the token in handshake
+  if (!authToken) {
+    throw new CustomError(
+      ErrorCodes.NO_TOKEN.message,
+      ErrorCodes.NO_TOKEN.code,
+      ErrorCodes.NO_TOKEN.status
+    );
+  }
+  // Verify the authToken
+  jwt.verify(authToken, auth.getAuthTokenPublicKey(), (err, user) => {
+    if (err) {
+      throw new CustomError(
+        ErrorCodes.EXPIRED_TOKEN.message,
+        ErrorCodes.EXPIRED_TOKEN.code,
+        ErrorCodes.EXPIRED_TOKEN.status
+      );
+    }
+    socket.user = user; // Attach user data to the socket
+    console.log(`User connected: ${user.id}`);
+    callback();
   });
 };

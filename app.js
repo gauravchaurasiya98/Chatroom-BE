@@ -62,7 +62,7 @@ app.use((err, req, res, next) => {
 });
 
 // Middleware to authenticate WebSocket connections
-io.use(validation.authenticateWebSocketConnections);
+// io.use(validation.authenticateWebSocketConnections);
 // Handle WebSocket connections
 io.on("connection", (socket) =>
   webSocketController.handleConnections(io, socket)

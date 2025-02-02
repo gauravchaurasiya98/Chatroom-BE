@@ -1,22 +1,29 @@
 const messageController = require("./message");
+const { authenticateUser } = require("../middlewares/validation");
+const CustomError = require("../errors/CustomError");
+const ErrorCodes = require("../errors/ErrorCodes");
 
 // Active WebSocket connections
 const activeConnections = new Map();
 
 exports.handleConnections = (io, socket) => {
-  activeConnections.set(socket.id, socket);
-  console.log(`User connected: ${socket.user.id}`);
-
   socket.on("joinRoom", (room, callback) => {
-    if (!socket.rooms.has(room)) {
-      socket.join(room);
-      console.log(`${socket.user.id} joined room ${room}`);
+    try {
+      authenticateUser(socket, () => activeConnections.set(socket.id, socket));
+      if (!socket.rooms.has(room)) {
+        socket.join(room);
+        console.log(`${socket.user.id} joined room ${room}`);
+      }
+      callback({ success: true, room });
+    } catch (error) {
+      console.error("Error joining room:", error.message);
+      callback({ error });
     }
-    callback({ success: true, room });
   });
 
   socket.on("sendMessage", async ({ room, content }, callback) => {
     try {
+      authenticateUser(socket, () => activeConnections.set(socket.id, socket));
       if (socket.rooms.has(room)) {
         const message = await messageController.addMessage(
           socket.user.id,
@@ -39,22 +46,27 @@ exports.handleConnections = (io, socket) => {
             callback({ message: resMessage });
           }
         } else {
-          console.error("Error saving message");
-          if (callback) callback({ error: "Error saving message" });
+          throw new CustomError(
+            "Error saving message",
+            ErrorCodes.SERVER_ERROR.code
+          );
         }
       } else {
-        console.error("User is not in the room");
-        if (callback) callback({ error: "You are not in this room" });
+        throw new CustomError(
+          "User is not in the room",
+          ErrorCodes.SERVER_ERROR.code,
+          403
+        );
       }
     } catch (error) {
-      console.error("Error in sendMessage handler:", error);
-      if (callback) callback({ error: "Internal server error" });
+      console.error("Error in sendMessage handler:", error.message);
+      if (callback) callback({ error });
     }
   });
 
   socket.on("disconnect", () => {
-    console.log(`User disconnected: ${socket.user.id}`);
-    activeConnections.delete(socket.id);
+    if (socket.user) console.log(`User disconnected: ${socket.user.id}`);
+    activeConnections.delete(socket.id) && socket.disconnect(true);
   });
 };
 
